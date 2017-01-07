@@ -34,9 +34,22 @@ void setup()
 
 void loop()
 {
-  // Code de démo pour bon chargement
-  digitalWrite(PIN_LED_ARDUINO, HIGH);
-  delay(200);
+  int a, b;
+
   digitalWrite(PIN_LED_ARDUINO, LOW);
-  delay(200);
+
+  a = digitalRead(PIN_FIN_COURSE_ARRIERE);
+  if (a == HIGH)
+  {
+    digitalWrite(PIN_LED_ARDUINO, HIGH);
+    delay(50);
+  }
+  
+  b = digitalRead(PIN_FIN_COURSE_AVANT);
+  if (b == HIGH)
+  {
+    digitalWrite(PIN_LED_ARDUINO, HIGH);
+    delay(50);
+  }
+  
 }
