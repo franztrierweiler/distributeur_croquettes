@@ -13,7 +13,11 @@
 // Définir des étiquettes permet de changer plus facilement les broches dans le programme
 #define PIN_FIN_COURSE_ARRIERE  23
 #define PIN_FIN_COURSE_AVANT    25
+#define PIN_COMMANDE_RELAIS     6
 #define PIN_LED_ARDUINO         13
+
+// Temporisation (en ms)
+#define TEMPS_IMPULSION_MOTEUR  500
 
 //
 // Variables globales en mémoire RAM
@@ -29,9 +33,18 @@ void setup()
 {
   pinMode(PIN_FIN_COURSE_ARRIERE, INPUT); // Pull-down => 0 si actionneur ouvert
   pinMode(PIN_FIN_COURSE_AVANT, INPUT);   // Pull-down => 0 si actionneur ouvert
+  pinMode(PIN_COMMANDE_RELAIS, OUTPUT);   // Etat bas => le relais se ferme
   pinMode(PIN_LED_ARDUINO, OUTPUT);       // LED de la carte Arduino, utile pour le debug
 }
 
+// Fonction d'avance du moteur
+void avance_moteur()
+{
+  digitalWrite(PIN_COMMANDE_RELAIS, LOW);
+  delay(TEMPS_IMPULSION_MOTEUR);
+}
+
+// Boucle principale de l'Arduino
 void loop()
 {
   int a, b;
