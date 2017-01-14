@@ -42,6 +42,7 @@ void avance_moteur()
 {
   digitalWrite(PIN_COMMANDE_RELAIS, LOW);
   delay(TEMPS_IMPULSION_MOTEUR);
+  digitalWrite(PIN_COMMANDE_RELAIS, HIGH);
 }
 
 // Boucle principale de l'Arduino
@@ -56,6 +57,7 @@ void loop()
   {
     digitalWrite(PIN_LED_ARDUINO, HIGH);
     delay(50);
+    avance_moteur();
   }
   
   b = digitalRead(PIN_FIN_COURSE_AVANT);
@@ -64,5 +66,5 @@ void loop()
     digitalWrite(PIN_LED_ARDUINO, HIGH);
     delay(50);
   }
-  
+
 }
