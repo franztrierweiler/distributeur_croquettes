@@ -15,6 +15,7 @@
 #define PIN_FIN_COURSE_AVANT    23
 #define PIN_COMMANDE_RELAIS     6
 #define PIN_LED_ARDUINO         13
+#define PIN_LED_PRESENCE        9
 
 // Temporisation (en ms)
 #define TEMPS_IMPULSION_MOTEUR  500
@@ -35,6 +36,7 @@ void setup()
   pinMode(PIN_FIN_COURSE_AVANT, INPUT);   // Pull-down => 0 si actionneur ouvert
   pinMode(PIN_COMMANDE_RELAIS, OUTPUT);   // Etat bas => le relais se ferme
   pinMode(PIN_LED_ARDUINO, OUTPUT);       // LED de la carte Arduino, utile pour le debug
+  pinMode(PIN_LED_PRESENCE, OUTPUT);      // LED indiquant qu'une présence a été détectée
 }
 
 // Fonction d'avance du moteur
@@ -43,6 +45,15 @@ void avance_moteur()
   digitalWrite(PIN_COMMANDE_RELAIS, LOW);
   delay(TEMPS_IMPULSION_MOTEUR);
   digitalWrite(PIN_COMMANDE_RELAIS, HIGH);
+}
+
+// Fonction de détection de présence
+// Retourne TRUE si une présence est détectée
+// Retourne FALSE si aucun présence n'est détectée
+boolean detecte_presence()
+{
+  // Demander au SR04 d'effectuer une mesure de distance
+  
 }
 
 // Boucle principale de l'Arduino
