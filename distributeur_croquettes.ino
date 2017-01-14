@@ -53,7 +53,13 @@ void avance_moteur()
 boolean detecte_presence()
 {
   // Demander au SR04 d'effectuer une mesure de distance
-  
+
+  // Ecouter la réponse du SR04
+
+  // Convertir la distance
+
+  // Retourner TRUE ou FALSE selon la valeur calculée
+
 }
 
 // Boucle principale de l'Arduino
