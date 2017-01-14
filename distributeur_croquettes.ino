@@ -11,8 +11,8 @@
 
 // Affectation des broches de l'ATMEGA 2560
 // Définir des étiquettes permet de changer plus facilement les broches dans le programme
-#define PIN_FIN_COURSE_ARRIERE  23
-#define PIN_FIN_COURSE_AVANT    25
+#define PIN_FIN_COURSE_ARRIERE  25
+#define PIN_FIN_COURSE_AVANT    23
 #define PIN_COMMANDE_RELAIS     6
 #define PIN_LED_ARDUINO         13
 
@@ -42,6 +42,7 @@ void avance_moteur()
 {
   digitalWrite(PIN_COMMANDE_RELAIS, LOW);
   delay(TEMPS_IMPULSION_MOTEUR);
+  digitalWrite(PIN_COMMANDE_RELAIS, HIGH);
 }
 
 // Boucle principale de l'Arduino
@@ -56,6 +57,7 @@ void loop()
   {
     digitalWrite(PIN_LED_ARDUINO, HIGH);
     delay(50);
+    avance_moteur();
   }
   
   b = digitalRead(PIN_FIN_COURSE_AVANT);
@@ -64,5 +66,5 @@ void loop()
     digitalWrite(PIN_LED_ARDUINO, HIGH);
     delay(50);
   }
-  
+
 }
