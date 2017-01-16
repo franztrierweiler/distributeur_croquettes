@@ -16,6 +16,8 @@
 #define PIN_COMMANDE_RELAIS     6
 #define PIN_LED_ARDUINO         13
 #define PIN_LED_PRESENCE        9
+#define PIN_TRIGGER             8
+#define PIN_ECHO                7
 
 // Temporisation (en ms)
 #define TEMPS_IMPULSION_MOTEUR  500
@@ -37,7 +39,9 @@ void setup()
   pinMode(PIN_COMMANDE_RELAIS, OUTPUT);   // Etat bas => le relais se ferme
   pinMode(PIN_LED_ARDUINO, OUTPUT);       // LED de la carte Arduino, utile pour le debug
   pinMode(PIN_LED_PRESENCE, OUTPUT);      // LED indiquant qu'une présence a été détectée
-}
+  pinMode(PIN_TRIGGER, OUTPUT);          // sortie pour piloter le détecteur de proximité
+  pinMode(PIN_ECHO ,INPUT);
+} 
 
 // Fonction d'avance du moteur
 void avance_moteur()
@@ -52,11 +56,12 @@ void avance_moteur()
 // Retourne FALSE si aucun présence n'est détectée
 boolean detecte_presence()
 {
-  // Demander au SR04 d'effectuer une mesure de distance
+  digitalWrite (PIN_TRIGGER,HIGH);  // Demander au SR04 d'effectuer une mesure de distance
+  delayMicroseconds(10); // attendre 10 microsecondes 
 
-  // Ecouter la réponse du SR04
+  // Lire la réponse du SR04
 
-  // Convertir la distance
+  // Convertir la distance en centimètres
 
   // Retourner TRUE ou FALSE selon la valeur calculée
 
