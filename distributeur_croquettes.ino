@@ -39,4 +39,6 @@ void loop()
   delay(200);
   digitalWrite(PIN_LED_ARDUINO, LOW);
   delay(200);
+  
+  // Papa à Sixtine: Mettre ici le code pour tester l'état du bouton
 }
