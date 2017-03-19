@@ -18,9 +18,10 @@
 #define PIN_LED_PRESENCE        9
 #define PIN_TRIGGER             8
 #define PIN_ECHO                7
+#define PIN_BUZZER              10
 
 // Temporisation (en ms)
-#define TEMPS_IMPULSION_MOTEUR  500
+#define TEMPS_IMPULSION_MOTEUR  5000
 
 //
 // Variables globales en mémoire RAM
@@ -40,7 +41,14 @@ void setup()
   pinMode(PIN_LED_ARDUINO, OUTPUT);       // LED de la carte Arduino, utile pour le debug
   pinMode(PIN_LED_PRESENCE, OUTPUT);      // LED indiquant qu'une présence a été détectée
   pinMode(PIN_TRIGGER, OUTPUT);          // sortie pour piloter le détecteur de proximité
-  pinMode(PIN_ECHO ,INPUT);
+  pinMode(PIN_ECHO, INPUT);               // Entrée pour lire la réponse du capteur
+  pinMode(PIN_BUZZER, OUTPUT); 
+
+  // Initialisation de la ligne série pour le debug
+  Serial.begin(9600);
+
+  // Couper le moteur (après configruation la sortie est à LOW, ce qui ferme le relais)
+  digitalWrite(PIN_COMMANDE_RELAIS, HIGH);
 } 
 
 // Fonction d'avance du moteur
@@ -56,21 +64,34 @@ void avance_moteur()
 // Retourne FALSE si aucun présence n'est détectée
 boolean detecte_presence()
 {
+  int duree_echo;
+  int distance;
+  
   digitalWrite (PIN_TRIGGER,HIGH);  // Demander au SR04 d'effectuer une mesure de distance
   delayMicroseconds(10); // attendre 10 microsecondes 
-
+  digitalWrite (PIN_TRIGGER, LOW);  // Faire baisser le signal
+  
   // Lire la réponse du SR04
-
+  duree_echo = pulseIn(PIN_ECHO, HIGH);
+  distance = duree_echo / 58;
+  
   // Convertir la distance en centimètres
+  distance = duree_echo / 58;
+  Serial.print("Distance (cm) : "); 
+  Serial.println(distance); 
 
-  // Retourner TRUE ou FALSE selon la valeur calculée
-
+  if (distance > 40) 
+    return false;
+  else
+    return true;
+    
 }
 
 // Boucle principale de l'Arduino
 void loop()
 {
   int a, b;
+  boolean presence_chat;
 
   digitalWrite(PIN_LED_ARDUINO, LOW);
 
@@ -88,5 +109,21 @@ void loop()
     digitalWrite(PIN_LED_ARDUINO, HIGH);
     delay(50);
   }
+
+  presence_chat = detecte_presence();
+  if (presence_chat == true)
+  {
+    Serial.println("Chat !!!"); 
+    digitalWrite(PIN_LED_PRESENCE, HIGH);
+    digitalWrite(PIN_BUZZER, HIGH);
+    delay(1000);
+    digitalWrite(PIN_LED_PRESENCE, LOW);
+    digitalWrite(PIN_BUZZER, LOW);
+
+    // Distribuer une croquette
+    avance_moteur();
+  }
+  
+  delay(1000);
 
 }
