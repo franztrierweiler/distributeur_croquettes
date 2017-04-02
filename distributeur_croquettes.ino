@@ -21,7 +21,7 @@
 #define PIN_BUZZER              10
 
 // Temporisation (en ms)
-#define TEMPS_IMPULSION_MOTEUR  5000
+#define TEMPS_IMPULSION_MOTEUR  10000
 
 //
 // Variables globales en mémoire RAM
@@ -80,11 +80,25 @@ boolean detecte_presence()
   Serial.print("Distance (cm) : "); 
   Serial.println(distance); 
 
-  if (distance > 40) 
+  if (distance > 10) 
     return false;
   else
     return true;
     
+}
+
+// Test du distributeur
+void test_distributeur()
+{
+  // Test du buzzer
+  digitalWrite(PIN_BUZZER, HIGH);
+  delay(500);
+  digitalWrite(PIN_BUZZER, LOW);
+
+  delay(1000);
+
+  // Test du moteur
+  avance_moteur();
 }
 
 // Boucle principale de l'Arduino
@@ -92,26 +106,40 @@ void loop()
 {
   int a, b;
   boolean presence_chat;
+  boolean anomalie;
 
+  // Test
+  //for (;;)
+  //{
+  //  test_distributeur();
+  //  delay(5000);
+  //}
+
+  anomalie = false;
   digitalWrite(PIN_LED_ARDUINO, LOW);
 
   a = digitalRead(PIN_FIN_COURSE_ARRIERE);
   if (a == HIGH)
   {
     digitalWrite(PIN_LED_ARDUINO, HIGH);
-    delay(50);
-    avance_moteur();
+    digitalWrite(PIN_BUZZER, HIGH);
+    delay(500);
+    digitalWrite(PIN_BUZZER, LOW); 
+    anomalie = true;
   }
   
   b = digitalRead(PIN_FIN_COURSE_AVANT);
   if (b == HIGH)
   {
     digitalWrite(PIN_LED_ARDUINO, HIGH);
-    delay(50);
+    digitalWrite(PIN_BUZZER, HIGH);
+    delay(500);
+    digitalWrite(PIN_BUZZER, LOW);
+    anomalie = true;
   }
 
   presence_chat = detecte_presence();
-  if (presence_chat == true)
+  if (presence_chat == true && anomalie !=true)
   {
     Serial.println("Chat !!!"); 
     digitalWrite(PIN_LED_PRESENCE, HIGH);
